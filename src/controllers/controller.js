@@ -1,8 +1,6 @@
 const axios = require('axios');
 require('dotenv').config();
 
-const MY_API_KEY = process.env.API_KEY;
-
 const Weather = require('../model/Weather');
 
 exports.renderHomePage = (req, res) => {
@@ -11,7 +9,7 @@ exports.renderHomePage = (req, res) => {
 
 exports.getWeather = (req, res) => {
     const city = req.body.city;
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${MY_API_KEY}&units=metric`;
+    const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.API_KEY}&units=metric`;
 
     const weather = new Weather(city);
     weather.validateUserInput();
@@ -27,9 +25,9 @@ exports.getWeather = (req, res) => {
                 weather: `It is currently ${response.data.main.temp} in ${response.data.name}.`,
             })
         })
-        .catch(error => {
+        .catch(err => {
             res.render('index', {
-                error: error.response.statusText,
+                error: err.response.statusText,
             })
         })
 
